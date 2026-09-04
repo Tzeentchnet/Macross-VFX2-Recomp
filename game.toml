@@ -1,0 +1,57 @@
+# Autofilled by tools/new_project_layout/probe_disc.py from your legal dump.
+# Review before shipping. Runtime quirks / overlay seeds still need hand work.
+
+[game]
+name = "Macross VF-X2"
+id = "SLPS-02237"
+players = 1
+exe = "disc/SLPS_022.37"
+disc = "disc/SLPS_022.37"
+load_address = "0x80011000"
+entry_pc = "0x80011000"
+text_size = "0x00073800"
+stack_base = "0x801FFFF0"
+
+# Digests are for data Track 01 (first BINARY FILE / TRACK 01).
+[prepare_disc]
+out_dir = "disc"
+bin_name = "Macross VF-X2 (Japan) (Track 1).bin"
+cue_name = "Macross VF-X2 (Japan).cue"
+boot_exe = "SLPS_022.37"
+known_sizes = [430867584]
+known_md5 = [
+  "1d54a44b3b7320994cb4ad8cc72b17e6",
+]
+known_sha1 = [
+  "f7e0d5b2175850b77d5bd8e2efd2123d74240af9",
+]
+known_crc32 = [
+  "9696eadb",
+]
+
+[recompiler]
+seeds = "seeds/ghidra_funcs.txt"
+out_dir = "generated"
+strict = true
+
+[runtime]
+window_title = "Macross VF-X2 Recompiled"
+bios_hle = false
+openbios = true
+overlay_cache = true
+memcard_dir = "saves"
+
+[video]
+renderer = "opengl"
+aspect_ratio = "4:3"
+
+[controller]
+default_mode = "digital"
+
+# Online mount gate: digests + track count + optional TOC fingerprint
+# (see docs/NETPLAY.md).
+multitap_analog = true
+[netplay]
+require_cue = true
+required_tracks = 3
+required_disc_fp = "6f52fa0234d395562e0ee828cc1041995d4e29d173c016547c81cc265fc82ee6"
