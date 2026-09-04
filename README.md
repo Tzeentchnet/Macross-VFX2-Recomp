@@ -1,5 +1,28 @@
 # Macross VF-X2 (Japan) - Recomp
 
+
+First release of the Macross VF-X2 recompilation project.
+
+## Status
+- Graphics: Working
+- Gameplay: Working
+- Performance: Working
+- Tested successfully in-game
+
+## Included
+- Windows executable
+
+## Requirements
+- A legally obtained copy of Macross VF-X2 is required.
+- Original game data is not included.
+
+## Credits
+Built using PSXRecomp and recomp-ui.
+
+Upload:
+
+
+
 > **Work in Progress:** This recompilation project is currently under development. Features, compatibility, performance, and functionality may change as development continues.
 
 A modern fan-made recompilation project for **Macross VF-X2 (Japan)**, originally released for the **Sony PlayStation**.
