@@ -223,6 +223,13 @@ The remaining MOD data includes transformation or animation-related records
 used by the game, but that envelope is not yet decoded. Static geometry and
 embedded textures can be imported without interpreting it.
 
+### Blender companion importer
+
+[Macross VF-X2 Blender](https://github.com/Tzeentchnet/Macross-VFX2-Blender)
+is a Blender 5.2 add-on for importing the standalone TMD files and MOD
+containers described above. The add-on is maintained separately from the
+recompilation project.
+
 ## Other formats
 
 The following descriptions are intentionally conservative.

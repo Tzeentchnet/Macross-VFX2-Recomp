@@ -260,6 +260,13 @@ leads. In particular, the current English translation changes rasterized TIX
 image resources rather than a conventional text string table, and no mission
 or media asset is currently confirmed cut.
 
+## Companion tooling
+
+[Macross VF-X2 Blender](https://github.com/Tzeentchnet/Macross-VFX2-Blender)
+is a companion Blender 5.2 add-on for importing the game's standalone TMD
+models and MOD model containers. It implements the asset-format findings
+documented in [Disc and file formats](docs/file-formats.md).
+
 ## Project layout
 
 ```text
