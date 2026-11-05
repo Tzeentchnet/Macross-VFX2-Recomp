@@ -34,10 +34,10 @@ The verified Track 1 contains 349 files:
 
 | Extension | Count | Current interpretation | Confidence |
 |---|---:|---|---|
-| `.TIX` | 121 | Game-specific image or image-container resource | Strong inference |
+| `.TIX` | 121 | VFX2 VRAM-upload stream using TIM-style rectangles | Confirmed |
 | `.TOX` | 60 | Unknown; possibly texture/object companion data | Lead |
-| `.MOD` | 57 | Game-specific module/model data; not assumed to be tracker music | Lead |
-| `.TMD` | 53 | Likely PlayStation model data | Strong inference |
+| `.MOD` | 57 | VFX2 model container with embedded TMD and optional TIM data | Confirmed |
+| `.TMD` | 53 | Standard relative-address PlayStation model data | Confirmed |
 | `.PAC` | 19 | Likely package/archive container | Lead |
 | `.BIN` | 19 | Opaque game data or banks | Unknown |
 | `.BGD` | 5 | Likely background data | Lead |
@@ -85,18 +85,59 @@ TIM flags describe indexed/direct pixel mode and CLUT presence. These files
 can be approached with existing PlayStation TIM tooling, subject to normal
 palette and transparency handling.
 
+The 57 `.MOD` files also contain 46 byte-valid standard TIM images. Their
+blocks use the normal TIM length and rectangle rules. The self-contained
+Variable Fighter files under `MOD/` use these images for all sampled TPage and
+CLUT references; smaller mission-specific MOD files can still depend on the
+mission TIX bank.
+
 ## TIX
 
-### Confirmed observations
+TIX is a read-only-decoded VFX2 VRAM-upload stream. It reuses the TIM magic and
+TIM image-block rectangle, but its second word is a game-specific pair of
+16-bit fields rather than an ordinary TIM flags word.
 
-- All 121 files begin with `10 00 00 00`.
-- The second 32-bit word does not behave like a conventional TIM flags word.
-- TIX sizes range from roughly 11 KiB to 460 KiB in the inspected image.
-- Mission briefings and several interface/description resources are TIX.
-- The English patch changes only TIX files.
-- No complete TIX decoder or encoder exists in this repository.
+```text
+Offset  Type    Meaning
+0x00    u32     Magic, always 0x00000010
+0x04    u16     Stream mode: 2 or 4 in the verified files
+0x06    u16     Rectangle count for mode 4; zero for mode 2
+0x08    ...     Consecutive upload rectangles
+```
 
-Representative headers:
+Each upload rectangle is:
+
+```text
+Offset  Type       Meaning
+0x00    u32        Complete block length, including this 12-byte header
+0x04    u16        VRAM X coordinate in 16-bit words
+0x06    u16        VRAM Y coordinate
+0x08    u16        Width in 16-bit words
+0x0A    u16        Height
+0x0C    u16[w*h]   Raw words copied to VRAM
+```
+
+For every block in all 121 files:
+
+```text
+block_length == 12 + width * height * 2
+```
+
+The blocks consume each file exactly, with no footer or trailing padding.
+
+Two stream forms occur:
+
+| Mode | Count field | Files | Interpretation |
+|---:|---:|---:|---|
+| `2` | `0` | 33 | One direct-color upload; byte-compatible with a no-CLUT 16-bit TIM |
+| `4` | `2` through `210`, always even | 88 | Exactly `count` upload rectangles |
+
+Mode-4 rectangles can contain CLUT words, packed 4-bit or 8-bit texels, or
+other VRAM data. TIX does not tag the role of an individual rectangle.
+Textured TMD primitives provide the TPage and CLUT registers needed to
+interpret the uploaded words.
+
+Representative headers remain:
 
 ```text
 DATA00/BRF/IMGMSN01.TIX
@@ -109,67 +150,82 @@ SYSTEM/ADJUST.TIX
 10 00 00 00 04 00 04 00 0C 02 00 00 00 00 E0 01
 ```
 
-The shared `0x00000010` first word is image-like and matches TIM magic, but a
-TIX file must not be passed to a TIM decoder as if it were one ordinary TIM.
-For example, `04 00 12 00` would be `0x00120004` as a TIM flags word, which is
-not a normal standalone TIM mode. TIX is likely a wrapper, collection, or
-related game-specific structure.
+The format is sufficient for a decoder that emulates 1024x512 PS1 VRAM and
+resolves TMD texture references. It is not yet sufficient for a safe encoder:
+the semantic grouping and intended replacement rules for rectangles remain
+unknown, and byte-identical round trips have not been established.
 
-### Strong inferences
+### TMD
 
-The localized files behave like indexed raster resources:
-
-- Replacing their contents changes visible briefing and description text.
-- No executable or conventional text-table file is changed.
-- The changed-byte volume is consistent with pixel/tile replacement.
-- Header fields vary in ways compatible with image dimensions, placement,
-  record counts, palette data, or VRAM coordinates.
-
-A plausible working model is:
+All 53 `.TMD` files are standard little-endian PlayStation TMD model data:
 
 ```text
-TIX
-|-- container or record metadata
-|-- one or more image/tile records
-|-- CLUT/palette data
-`-- indexed pixel data
+Offset  Type  Meaning
+0x00    u32   ID, 0x00000041
+0x04    u32   Address flags, zero in every disc TMD
+0x08    u32   Object count
+0x0C    ...   28-byte object descriptors
 ```
 
-This model is not yet sufficient to write a safe encoder.
+Each object descriptor contains relative offsets and counts for vertices,
+normals, and primitives, followed by the signed TMD scale field. When the
+address flag is zero, every object offset is relative to the common object
+table base at file offset `0x0C`, not to its individual descriptor.
 
-### Unknowns
+All retail primitives validated as polygon packets in modes `0x20` through
+`0x3F`. The observed set covers:
 
-- Header schema and endianness of each field beyond the fixed first word
-- Record count and record boundaries
-- 4-bit versus 8-bit indexed modes
-- CLUT location and BGR555 interpretation
-- Pixel swizzling or tile order
-- Compression, if any
-- Alignment and padding rules
-- Whether TOX files describe or reference TIX records
+- triangles and quads;
+- flat and Gouraud shading;
+- lit and no-light packets;
+- flat and per-vertex pigment;
+- textured and untextured packets;
+- one- and two-sided flags; and
+- opaque and semitransparent modes.
 
-### Recommended TIX research sequence
+Textured packets carry normal PS1 CBA/CLUT and TSB/TPage words. Those values
+resolve directly against VRAM populated from TIX or TIM upload rectangles.
+Vertex and normal records use the standard four signed 16-bit components,
+with the fourth component serving as padding.
 
-1. Build a read-only header dumper for all 121 files and cluster the second
-   through eighth words by value.
-2. Search for nested valid TIM block structures, not just `0x10` byte
-   patterns.
-3. Locate plausible BGR555 CLUTs and render adjacent data as 4-bit and 8-bit
-   indexed pixels.
-4. Compare stock and locally patched versions of the same TIX at byte and
-   tile granularity.
-5. Validate candidate decoding against runtime screenshots.
-6. Only after round-trip identity is achieved, implement an encoder.
+Quad packet vertices are in GPU triangle-strip order. The two triangles are
+`(0, 1, 2)` and `(1, 3, 2)`, giving the conventional mesh perimeter
+`(0, 1, 3, 2)`. Treating `(0, 1, 2, 3)` as a perimeter creates crossed
+bow-tie faces. In the 7,325 lit quads from the standalone retail TMD files,
+the strip-to-perimeter conversion aligned the first geometric triangle with
+the stored normal in 7,302 non-degenerate cases (99.7 percent after accounting
+for the format's clockwise winding); the raw perimeter interpretation aligned
+in only 32 cases.
+
+### MOD
+
+Every `.MOD` file begins with little-endian magic `0x11E1A300`. MOD is a VFX2
+container, not tracker music. The 57 files contain 140 fully validated
+relative-address TMD blocks and 46 standard TIM images.
+
+The 32-bit word at offset `0x04` is a declared model count. It equals the
+number of validated embedded TMD blocks in 54 of 57 files. `MOD/VF01A.MOD`,
+`MOD/VF11A.MOD`, and `MOD/VF17.MOD` each contain one additional structurally
+valid TMD block beyond that value, so readers should not treat the count as a
+safe end-of-file boundary.
+
+The first embedded TMD begins at:
+
+```text
+0x1740 + 4 * word_at_MOD_offset_0x20
+```
+
+for all 57 verified files. Subsequent TMD and TIM blocks are separated by
+game-specific data and alignment, so a reader should validate each candidate
+header and all of its relative ranges rather than assuming fixed strides.
+
+The remaining MOD data includes transformation or animation-related records
+used by the game, but that envelope is not yet decoded. Static geometry and
+embedded textures can be imported without interpreting it.
 
 ## Other formats
 
 The following descriptions are intentionally conservative.
-
-### TMD
-
-The `.TMD` extension is conventionally used for PlayStation 3D model data.
-The disc contains 53 such files, making model use likely, but the headers and
-guest loader have not yet been documented here.
 
 ### STR and XA
 
@@ -178,11 +234,10 @@ Two `.STR` files likely contain PlayStation streamed movie data. The single
 audio. Runtime validation confirms XA/SPU behavior on the tested path, but no
 stream index has been mapped.
 
-### PAC, MOD, TOX, BIN, BGD, CEL, and POS
+### PAC, TOX, BIN, BGD, CEL, and POS
 
 These are game-specific or insufficiently identified. Treat them as opaque
 until both a signature analysis and the relevant guest loader are understood.
-In particular, `.MOD` must not be assumed to mean Amiga tracker music.
 
 ## English-patch footprint
 

@@ -59,8 +59,10 @@ See [Localization](localization.md) for the exact boundary.
 ## Current limitations
 
 - Most guest functions do not have semantic names.
-- TIX is only partially characterized; there is no checked-in decoder or
-  encoder.
+- TIX has a verified read-only VRAM-upload decoder layout, but no safe encoder
+  or byte-identical round-trip workflow.
+- MOD static TMD/TIM contents are mapped; its transformation and animation
+  envelope remains undecoded.
 - A raw Shift-JIS-looking byte scan is too noisy to prove the presence of a
   usable string table.
 - Static call-graph "orphan" status does not prove that code is unreachable.
