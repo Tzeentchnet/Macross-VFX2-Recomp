@@ -1,0 +1,23 @@
+format_version = 5
+id = "macross.enhancement.fast-loading"
+version = "1.0.0"
+name = "Macross Fast Loading (4x)"
+author = "Macross VF-X2 Recomp"
+description = "Experimental fixed 4x host pacing for sustained non-XA loading. Guest VBlanks, CD deadlines, interrupts, callbacks, XA audio, and FMVs remain authoritative."
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "SLPS-02237"
+
+[[feature]]
+id = "fast-loading"
+name = "Fast Loading (4x)"
+description = "Enabled by default. Runs detected non-XA loading windows at up to 4x host pace without changing guest-visible CD timing. Disable this if a loading, audio, or transition regression is found."
+group = "Quality of Life"
+default_enabled = true
+quick = true
+
+[[plugin]]
+feature = "fast-loading"
+id = "macross.fast-loading"

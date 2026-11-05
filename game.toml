@@ -33,6 +33,7 @@ known_crc32 = [
 seeds = "seeds/ghidra_funcs.txt"
 out_dir = "generated"
 strict = true
+mod_function_entry_funcs = ["0x8001A7D8", "0x80025468"]
 
 [runtime]
 window_title = "Macross VF-X2 Recompiled"
@@ -42,8 +43,15 @@ overlay_cache = true
 memcard_dir = "saves"
 
 [video]
-renderer = "opengl"
+renderer = "vulkan"
+offer_vulkan = true
 aspect_ratio = "4:3"
+pgxp_mod_only = true
+
+[widescreen]
+native_wide = true
+gte_game_mode = true
+nw_hud_corners = true
 
 [controller]
 default_mode = "digital"

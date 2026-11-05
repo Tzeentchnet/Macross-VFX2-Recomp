@@ -1,0 +1,23 @@
+format_version = 5
+id = "macross.diagnostics.debug-menu"
+version = "1.0.0"
+name = "Macross Retail Debug Menu"
+author = "Macross VF-X2 Recomp"
+description = "Exposes the retail executable's dormant configuration menu on F12. The menu can alter game state and is intended only for reverse engineering."
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "SLPS-02237"
+
+[[feature]]
+id = "debug-menu"
+name = "Retail Debug Menu (Experimental)"
+description = "Press F12 during gameplay to open the original CONFIGURATION MODE. Disabled by default: its test-flight, immortality, module, mission, memory, XA, collision, and camera controls can disrupt normal progress."
+group = "Diagnostics"
+default_enabled = false
+quick = true
+
+[[plugin]]
+feature = "debug-menu"
+id = "macross.debug-menu"

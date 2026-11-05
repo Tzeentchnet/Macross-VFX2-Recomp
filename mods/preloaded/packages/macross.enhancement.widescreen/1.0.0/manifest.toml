@@ -1,0 +1,23 @@
+format_version = 5
+id = "macross.enhancement.widescreen"
+version = "1.0.0"
+name = "Macross Native Widescreen"
+author = "Macross VF-X2 Recomp"
+description = "Experimental native 16:9 rendering through a wider framebuffer and field of view, without stretching the 4:3 game image. Known first-mission backdrop gaps keep it disabled by default."
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "SLPS-02237"
+
+[[feature]]
+id = "widescreen"
+name = "Native Widescreen (Experimental)"
+description = "Renders 3D gameplay into a native 16:9 surface. Disabled by default because the first mission reveals large black voids and seams in finite backdrop geometry; title-specific background and culling fixes are not yet available."
+group = "Display"
+default_enabled = false
+quick = true
+
+[[plugin]]
+feature = "widescreen"
+id = "macross.widescreen.16-9"

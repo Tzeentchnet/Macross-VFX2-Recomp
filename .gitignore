@@ -42,6 +42,9 @@ settings.toml
 # Local analysis scratch
 /analysis/
 
+# Generated locally from the official NXP1000 English xdelta release.
+/mods/preloaded/packages/macross.localization.english/
+
 # Ghidra / local analysis
 /ghidra/projects/
 *.gpr
