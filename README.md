@@ -117,6 +117,11 @@ Run the finished build with:
     --disc ".\disc\Macross VF-X2 (Japan).cue"
 ```
 
+For normal use, double-click [launch.bat](launch.bat) or run it from the
+repository root. It starts the completed `build-release` launcher when
+available and otherwise falls back to the `build-setup` first-run host.
+Optional command-line arguments are forwarded to the selected executable.
+
 ## Enhancement status
 
 ### English localization
