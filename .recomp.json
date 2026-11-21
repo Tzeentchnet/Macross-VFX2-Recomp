@@ -1,0 +1,31 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Macross VF-X2",
+  "system": "PS1",
+  "type": "recomp",
+  "original": {
+    "region": "Japan",
+    "serial": "SLPS-02237",
+    "sha1": "f7e0d5b2175850b77d5bd8e2efd2123d74240af9"
+  },
+  "project": "Macross VF-X2 Recompiled",
+  "status": "in-progress",
+  "targets": [
+    "Windows"
+  ],
+  "toolchain": "PSXRecomp",
+  "approach": "Static recompilation of PS1 MIPS game code with PSXRecomp and a Vulkan renderer.",
+  "maintainers": [
+    {
+      "name": "Tzeentchnet",
+      "link": "https://github.com/Tzeentchnet"
+    }
+  ],
+  "links": [
+    {
+      "label": "Project overview",
+      "url": "https://github.com/Tzeentchnet/Macross-VFX2-Recomp#readme"
+    }
+  ],
+  "notes": "The game boots through the BIOS and FMVs, reaches the title and mission briefing, and enters 3D gameplay; complete-game compatibility is not established."
+}
