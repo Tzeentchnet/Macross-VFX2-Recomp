@@ -5,4 +5,4 @@
 [submodule "recomp-ui"]
 	path = recomp-ui
 	url = https://github.com/Tzeentchnet/recomp-ui.git
-	branch = macross-launcher-fix
+	branch = macross-v0.3.7-launcher-fix

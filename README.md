@@ -29,15 +29,20 @@ The submodules use the canonical `RetroPortingToolKit` repositories:
 
 | Component | Revision |
 |---|---|
-| [PSXRecomp](https://github.com/RetroPortingToolKit/psxrecomp) | [`eb6e4be46804538ba54c852429151ecd3e5598db`](https://github.com/RetroPortingToolKit/psxrecomp/commit/eb6e4be46804538ba54c852429151ecd3e5598db) |
-| [recomp-ui fork](https://github.com/Tzeentchnet/recomp-ui) | [`72081d93d9337764c67027daada68c09c9a2c0ae`](https://github.com/Tzeentchnet/recomp-ui/commit/72081d93d9337764c67027daada68c09c9a2c0ae) |
+| [PSXRecomp](https://github.com/RetroPortingToolKit/psxrecomp) | [`64dff4826cd4a3be343524c428e4b8b2941b4e10`](https://github.com/RetroPortingToolKit/psxrecomp/commit/64dff4826cd4a3be343524c428e4b8b2941b4e10) (`v0.3.7-alpha`) |
+| [recomp-ui fork](https://github.com/Tzeentchnet/recomp-ui) | [`df74aca20766e9e6abaad7f91596ef163d704ea7`](https://github.com/Tzeentchnet/recomp-ui/commit/df74aca20766e9e6abaad7f91596ef163d704ea7) |
 
-The selected PSXRecomp revision is newer than the `v0.3.4-alpha` release and
-contains the post-release fixes needed by this project, including setup-host
-BIOS validation, split-transfer code generation, widescreen HUD anchoring,
-CD/XA readiness behavior, and the current video/PGXP controls. The recomp-ui
-fork carries a launcher fix that skips the toolchain page when an already-built
-runtime only needs media confirmation.
+The selected PSXRecomp revision is the qualified `v0.3.7-alpha` release. It
+includes the setup-host BIOS validation, split-transfer code generation,
+widescreen HUD anchoring, CD/XA readiness behavior, and video/PGXP controls
+used by this project, along with the release's function-discovery, SPU, MDEC,
+GPU, controller-mode, and UTF-8 path corrections. Regeneration at this revision
+produces byte-identical tracked game sources for Macross VF-X2.
+
+The recomp-ui fork applies the launcher fix that skips the toolchain page when
+an already-built runtime only needs media confirmation on top of the companion
+PSX controls integration from
+[RetroPortingToolKit/recomp-ui#138](https://github.com/RetroPortingToolKit/recomp-ui/pull/138).
 
 ## Legal disc required
 
