@@ -1,0 +1,20 @@
+# Player release config for psxrecomp/tools/package_title_release.py.
+# See psxrecomp/docs/RELEASING_A_TITLE.md. From the repository root:
+#   python psxrecomp/tools/package_title_release.py package --channel public
+#       --platform windows --toolchain-bin <MinGW bin folder>
+schema = 1
+
+[product]
+name = "MacrossVFX2Recomp"
+display_name = "Macross VF-X2 Recompiled"
+exe_name = "Macross_VF_X2_Recompiled"
+version_file = "packaging/release/VERSION"
+
+[build]
+# The NXP1000 English patch has no redistribution license, so its generated
+# overlay package never ships in a release (see README "English localization").
+cmake_args = ["-DMACROSS_ENABLE_ENGLISH_LOCALIZATION=OFF"]
+
+[payload]
+start_here = "packaging/release/START_HERE.txt"
+files = ["README.md", "LICENSE", "recomplauncher.json"]

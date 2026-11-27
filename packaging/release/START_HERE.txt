@@ -1,0 +1,40 @@
+Macross VF-X2 Recompiled @VERSION@
+==================================
+
+Work in progress: the game boots, plays its FMVs, reaches the title and
+mission briefing, and enters 3D gameplay. The whole campaign has not been
+tested yet.
+
+What you need
+-------------
+Your own dump of Macross VF-X2 (Japan), serial SLPS-02237: the .cue file with
+its three .bin tracks beside it, or a .chd of the whole disc. No game data or
+BIOS dump is included; the bundled OpenBIOS is used.
+
+How to play
+-----------
+1. Unzip this folder anywhere you can write to (not Program Files).
+2. Run Macross_VF_X2_Recompiled.exe.
+3. Pick your .cue or .chd in the launcher, then press Launch.
+
+You can also start it with your disc directly:
+    Macross_VF_X2_Recompiled.exe --disc "C:\path\to\Macross VF-X2 (Japan).cue"
+
+RecompLauncher sets it up for you from recomplauncher.json in this folder.
+
+Where things are kept
+---------------------
+Everything stays in this folder: settings.toml, memory cards in saves\, and
+caches in cache\. To update, unzip a new release over this folder.
+
+English
+-------
+This release is in Japanese. The fan English patch by NXP1000 and its
+translators (https://github.com/NXP1000/Macross-VFX2-English) is not
+included, because it has no redistribution license. Building from source
+applies it to your own disc; see README.md.
+
+License
+-------
+GPL-3.0 (LICENSE). PSXRecomp, recomp-ui, OpenBIOS and other components keep
+their own licenses (see the licenses folder and bios\OpenBIOS.LICENSE).
