@@ -139,7 +139,8 @@ target_sources(psx-runtime PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src/macross_mods.c")
 
 # Stage runtime configs next to the exe for direct build/ launches.
-foreach(_PSX_RUNTIME_CONFIG game.toml game_options.toml)
+# recomplauncher.json belongs beside the exe in every release folder.
+foreach(_PSX_RUNTIME_CONFIG game.toml game_options.toml recomplauncher.json)
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_PSX_RUNTIME_CONFIG}")
         add_custom_command(TARGET psx-runtime POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different

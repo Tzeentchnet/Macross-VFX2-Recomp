@@ -1,5 +1,7 @@
 # Macross VF-X2 Recompiled
 
+<a href="https://recomplauncher.com"><picture><source media="(prefers-color-scheme: dark)" srcset="https://recomplauncher.com/assets/press/launcher/badge-light.svg"><img alt="Get it on RecompLauncher" src="https://recomplauncher.com/assets/press/launcher/badge-dark.svg" height="48"></picture></a>
+
 Work-in-progress static recompilation of **Macross VF-X2 (Japan)** for modern
 PCs. This project is based on
 [omegakatana92/Macross-VFX-2-Recomp](https://github.com/omegakatana92/Macross-VFX-2-Recomp)
@@ -283,6 +285,7 @@ documented in [Disc and file formats](docs/file-formats.md).
 .
 |-- CMakeLists.txt
 |-- game.toml
+|-- recomplauncher.json # RecompLauncher setup; staged beside the exe
 |-- codegen_setup.c / codegen_setup.h
 |-- docs/
 |-- mods/preloaded/

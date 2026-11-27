@@ -1,0 +1,74 @@
+{
+  "$schema": "https://recomplauncher.com/schema/recomplauncher.json",
+  "format": 1,
+  "name": "Macross VF-X2 Recompiled",
+  "repo": "Tzeentchnet/Macross-VFX2-Recomp",
+  "inputs": [
+    {
+      "id": "game",
+      "label": "Your dump of Macross VF-X2 (Japan), serial SLPS-02237: pick its .cue file, with its three .bin tracks beside it, or a .chd of the whole disc.",
+      "formats": [{ "type": "file", "extensions": ["cue", "chd"] }],
+      "check": { "ids": ["SLPS-02237"] }
+    }
+  ],
+  "start": {
+    "program": ["Macross_VF_X2_Recompiled.exe"],
+    "args": ["--disc", "{input:game}", "--no-launcher"]
+  },
+  "system": {
+    "windows": { "graphics": { "vulkan": "1.1" } }
+  },
+  "config": [
+    {
+      "id": "main",
+      "format": "toml",
+      "file": [{ "path": "{install}/settings.toml" }]
+    }
+  ],
+  "settings": [
+    {
+      "id": "renderer",
+      "label": "Renderer",
+      "group": "Video",
+      "help": "Vulkan is the tested default. OpenGL and Software are fallbacks if Vulkan won't start on your PC.",
+      "choices": [
+        { "label": "Vulkan", "set": { "video/renderer": "\"vulkan\"" } },
+        { "label": "OpenGL", "set": { "video/renderer": "\"opengl\"" } },
+        { "label": "Software", "set": { "video/renderer": "\"software\"" } }
+      ],
+      "defaults": { "video/renderer": "\"vulkan\"" }
+    },
+    {
+      "id": "window",
+      "label": "Window",
+      "group": "Video",
+      "help": "Borderless fills your screen and switches apps quickly. Exclusive gives the game the screen to itself.",
+      "choices": [
+        { "label": "Windowed", "set": { "video/fullscreen": "0" } },
+        { "label": "Borderless", "set": { "video/fullscreen": "1" } },
+        { "label": "Exclusive", "set": { "video/fullscreen": "2" } }
+      ],
+      "defaults": { "video/fullscreen": "0" }
+    },
+    {
+      "id": "vsync",
+      "label": "V-Sync",
+      "group": "Video",
+      "help": "On stops tearing. VRR is for G-Sync and FreeSync screens.",
+      "choices": [
+        { "label": "On", "set": { "video/vsync": "\"on\"" } },
+        { "label": "Off", "set": { "video/vsync": "\"off\"" } },
+        { "label": "Adaptive", "set": { "video/vsync": "\"adaptive\"" } },
+        { "label": "VRR", "set": { "video/vsync": "\"vrr\"" } }
+      ],
+      "defaults": { "video/vsync": "\"on\"" }
+    }
+  ],
+  "saves": ["{install}/saves"],
+  "folders": {
+    "saves": [{ "path": "{install}/saves" }]
+  },
+  "actions": [
+    { "id": "saves", "label": "Memory cards", "help": "The game's memory cards and save states.", "open": "saves" }
+  ]
+}
